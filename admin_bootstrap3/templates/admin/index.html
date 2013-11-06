@@ -1,0 +1,93 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+    <div class="col-md-8">
+        {% if app_list %}
+            {% for app in app_list %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a href="{{ app.app_url }}" title="{% blocktrans with name=app.name %}Models in the {{ name }} application{% endblocktrans %}">
+                            {% blocktrans with name=app.name %}{{ name }}{% endblocktrans %}
+                        </a>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table ">
+                            {% for model in app.models %}
+                                <tr>
+                                    <th class="col-md-6">
+                                        {% if model.admin_url %}
+                                            <a href="{{ model.admin_url }}">{{ model.name }}</a>
+                                        {% else %}
+                                            {{ model.name }}
+                                        {% endif %}
+                                    </th>
+                                    <td class="col-md-3">
+                                        {% if model.add_url %}
+                                            <a href="{{ model.add_url }}" class="addlink">{% trans 'Add' %}</a>
+                                        {% else %}&nbsp;{% endif %}
+                                    </td>
+
+                                    <td class="col-md-3">
+                                        {% if model.admin_url %}
+                                            <a href="{{ model.admin_url }}" class="changelink">{% trans 'Change' %}</a>
+                                        {% else %}&nbsp;{% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>{% trans "You don't have permission to edit anything." %}</p>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+    <div class="col-md-4">
+        <h2>{% trans 'Recent Actions' %}</h2>
+        <h3>{% trans 'My Actions' %}</h3>
+        {% load log %}
+        {% get_admin_log 10 as admin_log for_user user %}
+        {% if not admin_log %}
+            <p>{% trans 'None available' %}</p>
+        {% else %}
+            <ul class="list-group">
+                {% for entry in admin_log %}
+                    <li class="list-group-item">
+                        {% if entry.is_addition %}
+                            <i class="fa fa-plus fa-fw"></i>
+                        {% endif %}
+                        {% if entry.is_change %}
+                            <i class="fa fa-edit fa-fw"></i>
+                        {% endif %}{% if entry.is_deletion %}
+                            <i class="fa fa-trash-o fa-fw"></i>
+                        {% endif %}
+                        {% if entry.is_deletion or not entry.get_admin_url %}
+                            {{ entry.object_repr }}
+                        {% else %}
+                            <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                        {% endif %}
+                        <br/>
+                        {% if entry.content_type %}
+                            <span class="mini quiet">{% filter capfirst %}{% trans entry.content_type.name %}{% endfilter %}</span>
+                        {% else %}
+                            <span class="mini quiet">{% trans 'Unknown content' %}</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+    </div>
+{% endblock %}
