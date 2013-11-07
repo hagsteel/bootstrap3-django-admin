@@ -11,10 +11,10 @@ register = template.Library()
 
 
 class BootstrapWidgetNode(template.Node):
-    def __init__(self, field_name, attributes):
-        self.attributes = attributes
-        if 'is_inlines' in attributes:
-            self.is_inlines = attributes.pop('is_inlines') == 'True'
+    def __init__(self, field_name, extra_attributes):
+        self.extra_attributes = extra_attributes
+        if 'is_inlines' in extra_attributes:
+            self.is_inlines = extra_attributes.pop('is_inlines') == 'True'
         else:
             self.is_inlines = False
         self.field_name = field_name
@@ -23,6 +23,8 @@ class BootstrapWidgetNode(template.Node):
     def render(self, context):
         try:
             actual_field = self.field.resolve(context)
+            # if actual_field.name == 'slug':
+            #     import ipdb;ipdb.set_trace()
             if isinstance(actual_field.field, ReadOnlyPasswordHashField):
                 return self.render_readonly_widgets(actual_field)
 
@@ -42,16 +44,10 @@ class BootstrapWidgetNode(template.Node):
                 pass
 
             if 'class' in actual_field.field.widget.attrs:
-                self.attributes['class'] = 'form-control {}'.format(actual_field.field.widget.attrs['class'])
-                # actual_field.field.widget.attrs = self.attributes
-                # if actual_field.field.required and not self.is_inlines:
-                #     self.attributes['required'] = ''
-                # actual_field.field.widget.attrs.update(self.attributes)
-                # return actual_field.as_widget()
-            # else:
+                self.extra_attributes['class'] = 'form-control {}'.format(actual_field.field.widget.attrs['class'])
             if actual_field.field.required and not self.is_inlines:
-                self.attributes['required'] = ''
-            return actual_field.as_widget(attrs=self.attributes)
+                self.extra_attributes['required'] = ''
+            return actual_field.as_widget(attrs=dict(self.extra_attributes))
         except template.VariableDoesNotExist:
             return ''
 
@@ -75,8 +71,6 @@ class BootstrapWidgetNode(template.Node):
         date_widget = field.field.widget
         date_widget.attrs['class'] = 'date-field form-control'
         value = field.value()
-        # if not isinstance(values, list):
-        #     values = field.field.widget.decompress(field.value())
         output = get_template('admin/widgets/date_widget.html')
         html_output = output.render(Context({
             'date_widget': date_widget.render(field.name, value),
@@ -84,8 +78,6 @@ class BootstrapWidgetNode(template.Node):
         return html_output
 
     def render_model_choice_widgets(self, field):
-        # import ipdb;ipdb.set_trace()
-        # field.field.widget_attrs['class'] = 'form-control'
         widget = field.field.widget
         can_add_related = False
         if hasattr(field.field.widget, 'widget'):
@@ -151,7 +143,7 @@ class BootstrapWidgetNode(template.Node):
 @register.tag()
 def bootstrap_widget(parser, token):
     contents = token.split_contents()
-    attributes = {}
+    extra_attributes = {}
     if len(contents) > 2:
         for a in contents[2:]:
             kv = a.split('=')
@@ -161,10 +153,10 @@ def bootstrap_widget(parser, token):
                 value = value[1:-1]
             elif value.startswith("'") and value.endswith("'"):
                 value = value[1:-1]
-            attributes[key] = value
-        is_inlines=contents[2].split('=')[1] == 'True'
+            extra_attributes[key] = value
+        is_inlines = contents[2].split('=')[1] == 'True'
     else:
-        is_inlines=False
+        is_inlines = False
     field_name = contents[1]
-    attributes['class'] = 'form-control'
-    return BootstrapWidgetNode(field_name, attributes)
+    extra_attributes['class'] = 'form-control'
+    return BootstrapWidgetNode(field_name, extra_attributes)
