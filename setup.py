@@ -18,6 +18,7 @@ setup(
     long_description=read('README.md'),
     install_requires=[
         "Django >= 1.3",
+        "django-compressor",
     ],
     classifiers=[
         "Development Status :: Beta",
