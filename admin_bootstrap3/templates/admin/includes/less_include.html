@@ -1,0 +1,4 @@
+{% load compress %}
+{% if less_file %}
+    <link href="{{ STATIC_URL }}{{ less_file }}" rel="stylesheet" type="text/less" media="screen">
+{% endif %}
