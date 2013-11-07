@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_static widget_tweaks %}
+{% load i18n admin_static bootstrap_widgets %}
 
 {% block extrastyle %}{{ block.super }}{# <link rel="stylesheet" type="text/css" href="{% static "admin/css/login.css" %}" /> #}{% endblock %}
 
@@ -25,8 +25,8 @@
 
             {% csrf_token %}
             <div class="form-group">
-                {% render_field form.username placeholder=form.username.label class+="form-control input-lg" autofocus="" required="" %}
-                {% render_field form.password placeholder=form.password.label class+="form-control input-lg" %}
+                {% bootstrap_widget form.username  %}
+                {% bootstrap_widget form.password %}
                 <input type="hidden" name="this_is_the_login_form" value="1" />
                 <input type="hidden" name="next" value="{{ next }}" />
             </div>
