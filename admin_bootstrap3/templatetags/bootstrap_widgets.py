@@ -11,8 +11,12 @@ register = template.Library()
 
 
 class BootstrapWidgetNode(template.Node):
-    def __init__(self, field_name, is_inlines):
-        self.is_inlines = is_inlines
+    def __init__(self, field_name, attributes):
+        self.attributes = attributes
+        if 'is_inlines' in attributes:
+            self.is_inlines = attributes.pop('is_inlines') == 'True'
+        else:
+            self.is_inlines = False
         self.field_name = field_name
         self.field = template.Variable(field_name)
 
@@ -38,14 +42,16 @@ class BootstrapWidgetNode(template.Node):
                 pass
 
             if 'class' in actual_field.field.widget.attrs:
-                actual_field.field.widget.attrs['class'] = 'form-control {}'.format(actual_field.field.widget.attrs['class'])
-                if actual_field.field.required and not self.is_inlines:
-                    actual_field.field.widget.attrs['required'] = ''
-                return actual_field.as_widget()
-            else:
-                if actual_field.field.required and not self.is_inlines:
-                    return actual_field.as_widget(attrs={'class': 'form-control', 'required': ''})
-                return actual_field.as_widget(attrs={'class': 'form-control'})
+                self.attributes['class'] = 'form-control {}'.format(actual_field.field.widget.attrs['class'])
+                # actual_field.field.widget.attrs = self.attributes
+                # if actual_field.field.required and not self.is_inlines:
+                #     self.attributes['required'] = ''
+                # actual_field.field.widget.attrs.update(self.attributes)
+                # return actual_field.as_widget()
+            # else:
+            if actual_field.field.required and not self.is_inlines:
+                self.attributes['required'] = ''
+            return actual_field.as_widget(attrs=self.attributes)
         except template.VariableDoesNotExist:
             return ''
 
@@ -145,9 +151,20 @@ class BootstrapWidgetNode(template.Node):
 @register.tag()
 def bootstrap_widget(parser, token):
     contents = token.split_contents()
-    if len(contents) == 3:
+    attributes = {}
+    if len(contents) > 2:
+        for a in contents[2:]:
+            kv = a.split('=')
+            key = kv[0]
+            value = kv[1]
+            if value.startswith('"') and value.endswith('"'):
+                value = value[1:-1]
+            elif value.startswith("'") and value.endswith("'"):
+                value = value[1:-1]
+            attributes[key] = value
         is_inlines=contents[2].split('=')[1] == 'True'
     else:
         is_inlines=False
     field_name = contents[1]
-    return BootstrapWidgetNode(field_name, is_inlines)
+    attributes['class'] = 'form-control'
+    return BootstrapWidgetNode(field_name, attributes)
