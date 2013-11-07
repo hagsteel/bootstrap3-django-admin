@@ -23,8 +23,8 @@ class BootstrapWidgetNode(template.Node):
     def render(self, context):
         try:
             actual_field = self.field.resolve(context)
-            # if actual_field.name == 'slug':
-            #     import ipdb;ipdb.set_trace()
+            extra_attributes = dict(self.extra_attributes)
+
             if isinstance(actual_field.field, ReadOnlyPasswordHashField):
                 return self.render_readonly_widgets(actual_field)
 
@@ -44,10 +44,10 @@ class BootstrapWidgetNode(template.Node):
                 pass
 
             if 'class' in actual_field.field.widget.attrs:
-                self.extra_attributes['class'] = 'form-control {}'.format(actual_field.field.widget.attrs['class'])
+                extra_attributes['class'] = 'form-control {}'.format(actual_field.field.widget.attrs['class'])
             if actual_field.field.required and not self.is_inlines:
-                self.extra_attributes['required'] = ''
-            return actual_field.as_widget(attrs=dict(self.extra_attributes))
+                extra_attributes['required'] = ''
+            return actual_field.as_widget(attrs=extra_attributes)
         except template.VariableDoesNotExist:
             return ''
 
