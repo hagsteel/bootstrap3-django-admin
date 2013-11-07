@@ -48,7 +48,7 @@
 {% if not is_popup %}
     <!-- Header -->
     {% block top_nav %}
-    <div class="navbar navbar-inverse" role="navigation">
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -86,7 +86,7 @@
     </div>
     {% endblock top_nav %}
     <!-- END Header -->
-
+    <div style="margin-top:11px">&nbsp;</div>
     {% block breadcrumbs %}
         <ol class="breadcrumb">
             <li><a href="{% url 'admin:index' %}">{% trans 'Home' %}</a></li>

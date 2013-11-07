@@ -26,9 +26,11 @@ There are a few packages out there to apply Bootstrap styling and markup for Dja
 
 
 ## Additional notes
-Bootstrap is great, however Font Awesome (fontawesome.io) is nicer.
+Bootstrap is great, however [Font Awesome](http://fontawesome.io) is nicer.
 
 If you want to use Bootstraps default icons, just udpate the remplates and replace all "fa" classes with "glyphicons"
+
+If you can't see the icons while debugging, add this to your settings.py ```COMPRESS_OUTPUT_DIR = ''```
 
 ## Credits
 
