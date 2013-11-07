@@ -21,8 +21,18 @@ There are a few packages out there to apply Bootstrap styling and markup for Dja
         'django.contrib.admin',
      )
 
-
 3. That's it!
+
+
+## Configuration
+
+There isn't much to configure.
+If you want to add your own styles to the admin section, you can add ```ADMIN_LESS_FILE``` to setting.
+
+i.e: ```ADMIN_LESS_FILE = 'mystyles.less'``` or ```ADMIN_LESS_FILE = 'admin/mystyles.less'``` depending on where you put your file.
+
+Make sure the file exists within your ```static``` folder.
+
 
 
 ## Additional notes
