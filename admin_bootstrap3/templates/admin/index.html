@@ -19,32 +19,32 @@
                             {% blocktrans with name=app.name %}{{ name }}{% endblocktrans %}
                         </a>
                     </div>
-                    <div class="panel-body">
-                        <table class="table ">
-                            {% for model in app.models %}
-                                <tr>
-                                    <th class="col-md-6">
-                                        {% if model.admin_url %}
-                                            <a href="{{ model.admin_url }}">{{ model.name }}</a>
-                                        {% else %}
-                                            {{ model.name }}
-                                        {% endif %}
-                                    </th>
-                                    <td class="col-md-3">
-                                        {% if model.add_url %}
-                                            <a href="{{ model.add_url }}" class="addlink">{% trans 'Add' %}</a>
-                                        {% else %}&nbsp;{% endif %}
-                                    </td>
+                    <ul class="list-group">
+                        {% for model in app.models %}
+                            <li class="list-group-item">
+                            {% if model.admin_url %}
+                                <a href="{{ model.admin_url }}">{{ model.name }}</a>
+                            {% else %}
+                                {{ model.name }}
+                            {% endif %}
 
-                                    <td class="col-md-3">
-                                        {% if model.admin_url %}
-                                            <a href="{{ model.admin_url }}" class="changelink">{% trans 'Change' %}</a>
-                                        {% else %}&nbsp;{% endif %}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </table>
-                    </div>
+                            <div class="btn-group pull-right">
+                                {% if model.add_url %}
+                                    <a href="{{ model.add_url }}" class="btn btn-default btn-xs">
+                                        <i class="fa fa-plus"></i>
+                                        {% trans 'Add' %}
+                                    </a>
+                                {% else %}&nbsp;{% endif %}
+
+                                {% if model.admin_url %}
+                                    <a href="{{ model.admin_url }}" class="btn btn-default btn-xs">
+                                        <i class="fa fa-edit"></i>
+                                        {% trans 'Change' %}
+                                    </a>
+                                {% else %}&nbsp;{% endif %}
+                            </div>
+                        {% endfor %}
+                    </ul>
                 </div>
             {% endfor %}
         {% else %}
@@ -71,8 +71,8 @@
                         {% if entry.is_change %}
                             <i class="fa fa-edit fa-fw"></i>
                         {% endif %}{% if entry.is_deletion %}
-                            <i class="fa fa-trash-o fa-fw"></i>
-                        {% endif %}
+                        <i class="fa fa-trash-o fa-fw"></i>
+                    {% endif %}
                         {% if entry.is_deletion or not entry.get_admin_url %}
                             {{ entry.object_repr }}
                         {% else %}
