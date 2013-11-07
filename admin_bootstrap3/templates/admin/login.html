@@ -25,7 +25,7 @@
 
             {% csrf_token %}
             <div class="form-group">
-                {% bootstrap_widget form.username placeholder="Username" smint=12 %}
+                {% bootstrap_widget form.username placeholder="Username" %}
                 {% bootstrap_widget form.password placeholder="Password" %}
                 <input type="hidden" name="this_is_the_login_form" value="1" />
                 <input type="hidden" name="next" value="{{ next }}" />
