@@ -49,45 +49,44 @@
 {% if not is_popup %}
     <!-- Header -->
     {% block top_nav %}
-    <div class="navbar navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="glyphicon glyphicon-phone menu-dropdown"></span>
-                </button>
-                <a class="navbar-brand" href="#">{% block branding %}{% endblock %}</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav navbar-left">
-                    <li><a href="{% url 'admin:index' %}">Home</a></li>
-                    {% url 'django-admindocs-docroot' as docsroot %}
-                    {% if docsroot %}
-                        <li><a href="{{ docsroot }}">{% trans 'Documentation' %}</a></li>
-                    {% endif %}
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            {% trans 'Signed in as ' %}<strong>{% filter force_escape %}{% firstof user.get_short_name user.get_username %}{% endfilter %}</strong>
-                            <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            {% if user.is_active and user.is_staff %}
-                                {% if user.has_usable_password %}
-                                    <li><a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a></li>
+        <div class="navbar navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="glyphicon glyphicon-phone menu-dropdown"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">{% block branding %}{% endblock %}</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><a href="{% url 'admin:index' %}">Home</a></li>
+                        {% url 'django-admindocs-docroot' as docsroot %}
+                        {% if docsroot %}
+                            <li><a href="{{ docsroot }}">{% trans 'Documentation' %}</a></li>
+                        {% endif %}
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                {% trans 'Signed in as ' %}<strong>{% filter force_escape %}{% firstof user.get_short_name user.get_username %}{% endfilter %}</strong>
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                {% if user.is_active and user.is_staff %}
+                                    {% if user.has_usable_password %}
+                                        <li><a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a></li>
+                                    {% endif %}
+                                    <li><a href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a></li>
+                                    </ul>
+                                    </li>
                                 {% endif %}
-                                <li><a href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a></li>
-                                </ul>
-                                </li>
-                            {% endif %}
-                    {% block nav-global %}{% endblock %}
-                </ul>
-            </div><!--/.navbar-collapse -->
+                        {% block nav-global %}{% endblock %}
+                    </ul>
+                </div><!--/.navbar-collapse -->
+            </div>
         </div>
-    </div>
     {% endblock top_nav %}
     <!-- END Header -->
-    <div style="margin-top:11px">&nbsp;</div>
     {% block breadcrumbs %}
         <ol class="breadcrumb">
             <li><a href="{% url 'admin:index' %}">{% trans 'Home' %}</a></li>
