@@ -7,7 +7,7 @@ def read(fname):
 
 setup(
     name="admin_bootstrap3",
-    version="0.1.0",
+    version="0.1.1",
     author="Jonas Hagstedt",
     author_email="hagstedt@gmail.com",
     description=("Bootstrap3 admin"),
