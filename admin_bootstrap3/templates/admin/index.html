@@ -34,14 +34,14 @@
                                         <i class="fa fa-plus"></i>
                                         {% trans 'Add' %}
                                     </a>
-                                {% else %}&nbsp;{% endif %}
+                                {% else %}{% endif %}
 
                                 {% if model.admin_url %}
                                     <a href="{{ model.admin_url }}" class="btn btn-default btn-xs">
                                         <i class="fa fa-edit"></i>
                                         {% trans 'Change' %}
                                     </a>
-                                {% else %}&nbsp;{% endif %}
+                                {% else %}{% endif %}
                             </div>
                         {% endfor %}
                     </ul>
