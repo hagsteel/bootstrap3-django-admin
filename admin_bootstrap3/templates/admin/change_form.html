@@ -56,8 +56,14 @@
             {% if errors %}
                 <div class="alert alert-danger">
                     {% blocktrans count counter=errors|length %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktrans %}
+                    {% if adminform.form.non_field_errors %}
+                        <ul>
+                            {% for e in adminform.form.non_field_errors %}
+                                <li>{{ e }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </div>
-                {{ adminform.form.non_field_errors }}
             {% endif %}
 
             {% block field_sets %}

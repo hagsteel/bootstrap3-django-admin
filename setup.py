@@ -13,11 +13,11 @@ setup(
     description=("Bootstrap3 admin"),
     license="BSD",
     keywords="bootstrap3 django admin",
-    url = "",
+    url = "https://github.com/jonashagstedt/bootstrap3-django-admin",
     packages=['admin_bootstrap3', ],
     long_description=read('README.md'),
     install_requires=[
-        "Django >= 1.3",
+        "Django >= 1.4",
         "django-compressor",
     ],
     classifiers=[
