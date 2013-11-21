@@ -12,16 +12,34 @@ There are a few packages out there to apply Bootstrap styling and markup for Dja
 
 1.  pip install -e git://github.com/jonashagstedt/bootstrap3-django-admin.git#egg=admin_bootstrap
 
-2. Make sure you put ```'admin_bootstrap3',``` before django.contrib.admin in installed apps
+2. Make sure you put ```'admin_bootstrap3',``` before django.contrib.admin in installed apps.
 
 
     INSTALLED_APPS = (
     	...
         'admin_bootstrap3',
         'django.contrib.admin',
+
+        'compressor',
      )
 
-3. That's it!
+3. If you already have compressor setup, ignore the next steps
+
+4. Add ```compressor``` to installed apps
+
+5. Add COMPRESS_PRECOMPILERS to your settings
+
+    COMPRESS_PRECOMPILERS = (
+        ('text/less', 'lessc {infile} {outfile}'),
+    )
+
+6. Add ```'compressor.finders.CompressorFinder'``` to your STATICFILES_FINDERS
+
+    STATICFILES_FINDERS = (
+        ...
+        'compressor.finders.CompressorFinder',
+    )
+
 
 
 ## Configuration
