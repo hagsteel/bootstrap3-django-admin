@@ -1,12 +1,18 @@
-{% if related_url %}
-        <div class="pull-left" style="width:75%">
-            {{ model_select_widget }}
-        </div>
-        <div class="pull-right">
-            <a href="{{ related_url }}" class="add-another btn btn-default" id="{{ name }}" onclick="return showAddAnotherPopup(this);">
-                <i class="fa fa-plus"></i>
-            </a>
-        </div>
-{% else %}
+<div class="multi-select-wrapper">
+    <div>
+        <a href='#' class="select-all" data-target='{{name}}'>select all</a>
+        <a href='#' class="deselect-all" data-target='{{name}}'>deselect all</a>
+    </div>
+    {% if related_url %}
+    <div class="pull-left" style="width:75%">
+        {{ model_select_widget }}
+    </div>
+    <div class="pull-right">
+        <a href="{{ related_url }}" class="add-another btn btn-default" id="{{ name }}" onclick="return showAddAnotherPopup(this);">
+            <i class="fa fa-plus"></i>
+        </a>
+    </div>
+    {% else %}
     {{ model_select_widget }}
-{% endif %}
+    {% endif %}
+</div>
